@@ -1,16 +1,33 @@
-# This is a sample Python script.
+# Guido van Rossum <guido@python.org>
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+def step1():
+    print(
+        'Утка-маляр 🦆 решила выпить зайти в бар. '
+        'Взять ей зонтик? ☂️'
+    )
+    option = ''
+    options = {'да': True, 'нет': False}
+    while option not in options:
+        print('Выберите: {}/{}'.format(*options))
+        option = input()
+
+    if options[option]:
+        return step2_umbrella()
+    return step2_no_umbrella()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def step2_umbrella():
+    print(
+        'Утка не промокла, потому что взяла зонт.'
+    )
 
 
-# Press the green button in the gutter to run the script.
+def step2_no_umbrella():
+    print(
+        'Утка все равно не промокла, потому что ее крылья смазаны жиром. ' 
+        'Не переживай.'
+    )
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    step1()
