@@ -3,6 +3,7 @@ import csv
 
 def read_csv(filepath: str) -> list:
     """Takes csv file and transforms it to list of dicts"""
+
     employee_data = []
     with open(filepath) as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=';')
@@ -16,6 +17,7 @@ def read_csv(filepath: str) -> list:
 def get_hierarchy(raw_data: list[dict[str, str]]):
     """Takes list of dicts, find unique combinations
         and print department hierarchy"""
+
     depts = {}
     for item in raw_data:
         if item['Департамент'] not in depts.keys():
@@ -28,6 +30,8 @@ def get_hierarchy(raw_data: list[dict[str, str]]):
 
 
 def get_report_data(raw_data: list[dict[str, str]]) -> dict[dict]:
+    """Takes list of dicts and transforms it to dict of dicts to the further use"""
+
     dept_info = {}
     for item in raw_data:
         dept_info[item['Департамент']] = dept_info.get(item['Департамент'], {})
@@ -45,6 +49,8 @@ def get_report_data(raw_data: list[dict[str, str]]) -> dict[dict]:
 
 
 def show_report(report_data: dict[dict]):
+    """Prints data as a report"""
+
     print("{:<15} {:<15} {:<20} {:<10}".format('Департамент', 'Численность', 'Вилка', 'Средняя зарплата'))
     for name, info in report_data.items():
         people, salary, salary_min, salary_max, salary_mean = info.values()
@@ -52,6 +58,8 @@ def show_report(report_data: dict[dict]):
 
 
 def save_report(report_data: dict[dict]):
+    """Saves report data as a csv"""
+
     header = ['Департамент', 'Численность', 'Вилка', 'Средняя зарплата']
     with open('report.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
