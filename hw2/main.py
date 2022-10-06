@@ -20,7 +20,7 @@ def get_hierarchy(raw_data: list[dict[str, str]]):
 
     depts = {}
     for item in raw_data:
-        if item['Департамент'] not in depts.keys():
+        if item['Департамент'] not in depts:
             depts[item['Департамент']] = []
         if item['Отдел'] not in depts[item['Департамент']]:
             depts[item['Департамент']].append(item['Отдел'])
@@ -29,7 +29,7 @@ def get_hierarchy(raw_data: list[dict[str, str]]):
         print(f"{key}: {', '.join(depts[key])}")
 
 
-def get_report_data(raw_data: list[dict[str, str]]) -> dict[dict]:
+def get_report_data(raw_data: list[dict[str, str]]) -> dict[str, dict]:
     """Takes list of dicts and transforms it to dict of dicts to the further use"""
 
     dept_info = {}
@@ -48,7 +48,7 @@ def get_report_data(raw_data: list[dict[str, str]]) -> dict[dict]:
     return dept_info
 
 
-def show_report(report_data: dict[dict]):
+def show_report(report_data: dict[str, dict]):
     """Prints data as a report"""
 
     print("{:<15} {:<15} {:<20} {:<10}".format('Департамент', 'Численность', 'Вилка', 'Средняя зарплата'))
@@ -57,7 +57,7 @@ def show_report(report_data: dict[dict]):
         print("{:<15} {:<15} {:<20} {:<10}".format(name, people, str(salary_min) + '-' + str(salary_max), salary_mean))
 
 
-def save_report(report_data: dict[dict]):
+def save_report(report_data: dict[str, dict]):
     """Saves report data as a csv"""
 
     header = ['Департамент', 'Численность', 'Вилка', 'Средняя зарплата']
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     data = read_csv("Corp_Summary.csv")
 
     print(
-        '1. Вывести иерархию команд \n' 
+        '1. Вывести иерархию команд \n'
         '2. Вывести сводный отчёт по департаментам \n'
         '3. Сохранить сводный отчёт в виде csv-файла \n'
     )
