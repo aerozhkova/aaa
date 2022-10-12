@@ -27,8 +27,8 @@ class CountVectorizer:
 
 
 if __name__ == '__main__':
-    print("Введите тексты через Enter. "
-          "Нажмите Ctrl-D (Cmd-D), чтобы сохранить их.")
+    print('Введите тексты через Enter. '
+          'Нажмите Ctrl-D (Cmd-D), чтобы сохранить их.')
     corpus = []
     while True:
         try:
