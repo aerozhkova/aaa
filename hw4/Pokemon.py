@@ -14,7 +14,6 @@ class EmojiMixin:
         text = super().__str__()
         for category, emoji in self.emojid.items():
             text = text.replace(category, emoji)
-
         return text
 
 
