@@ -2,23 +2,18 @@ import json
 import keyword
 
 
-class JsonToPython:
-    def __init__(self, _dict: dict):
-        self._dict = _dict
+class AttributeSetter:
+    def __init__(self, dict_: dict):
+        self._set_attributes(dict_)
 
-    def __getattr__(self, item):
-        if item.endswith('_') and keyword.iskeyword(item[:-1]):
-            item = item[:-1]
-        if item in self._dict:
-            attr = self._dict[item]
-            if isinstance(attr, dict):
-                return JsonToPython(attr)
-            return attr
-        else:
-            raise AttributeError(f'Object has no attribute {item}')
-
-    def __str__(self):
-        return str(self._dict)
+    def _set_attributes(self, dict_: dict):
+        for k, v in dict_.items():
+            if keyword.iskeyword(k):
+                k = k + '_'
+            if isinstance(v, dict):
+                self.__dict__[k] = AttributeSetter(v)
+            else:
+                self.__dict__[k] = v
 
 
 class ColorizeMixin:
@@ -31,32 +26,35 @@ class ColorizeMixin:
             return super_repr
 
 
-class Advert:
+class BaseAdvert(AttributeSetter):
     repr_color_code = 33
 
     def __init__(self, _dict):
-        self.jtp = JsonToPython(_dict)
+        super().__init__(_dict)
         _ = self.price
 
-    def __getattr__(self, item):
-        return self.jtp.__getattr__(item)
+    def __getattribute__(self, item):
+        if item == 'price':
+            return self._get_price()
 
-    @property
-    def price(self):
-        price_value = 0
-        try:
-            price_value = self.jtp.__getattr__('price')
-        except AttributeError:
-            pass
-        if price_value < 0:
-            raise ValueError('price must be >= 0')
-        return price_value
+        return super().__getattribute__(item)
 
     def __repr__(self):
         return f'{self.title} | {self.price} ₽'
 
+    def _get_price(self):
+        price = 0
+        try:
+            price = super().__getattribute__('price')
+        except AttributeError:
+            pass
 
-class ColorizedAdvert(ColorizeMixin, Advert):
+        if price < 0:
+            raise ValueError('price must be >= 0')
+        return price
+
+
+class Advert(ColorizeMixin, BaseAdvert):
     pass
 
 
@@ -96,7 +94,5 @@ if __name__ == '__main__':
     }"""
     lesson = json.loads(lesson_str)
     corgi = Advert(lesson)
-    corgi_colored = ColorizedAdvert(lesson)
     print(corgi)
-    print(corgi_colored)
-    print(corgi_colored.class_)
+    print(corgi.class_)
