@@ -4,6 +4,7 @@ hw2/venv/
 hw3/venv/
 hw4/venv/
 .DS_Store
+/lessons
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
